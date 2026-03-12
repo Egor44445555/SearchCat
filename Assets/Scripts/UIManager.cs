@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using System;
 using System.Collections;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,19 +13,48 @@ public class UIManager : MonoBehaviour
     [SerializeField] float collectionRadius = 0.1f;
     [SerializeField] LayerMask itemLayer;
     [SerializeField] string itemTag = "Cat";
+    
+
+    [Header("Additional components")]
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject successMenu;
     [SerializeField] public GameObject soundIcon;
     [SerializeField] public GameObject sounIconDisabled;
     [SerializeField] public AudioSource music;
     [SerializeField] public AudioSource effect;
+    [SerializeField] GameObject errorCross;
+    [SerializeField] GameObject heart;
+    [SerializeField] GameObject recoveryHintButton;
+    [SerializeField] GameObject CountHint;
+    [SerializeField] TextMeshProUGUI countHintText;
+    [SerializeField] float recoveryHintTime = 5f;
 
     Camera cam;
+    CameraShake cameraShake;
+    GraphicRaycaster graphicRaycaster;
+    PointerEventData pointerEventData;
+    EventSystem eventSystem;
     int searchCount = 0;
     int maxSearchCount = 0;
     int currentLevel = 0;
     bool gamePause = false;
-    int maxLevel = 2;
+    int maxLevel = 2;    
+    int misses = 0;    
+    int currentHint = 3;
+    int successClick = 0;
+    bool endLevel = false;
+    PlayerData playerData;
+
+    // Heart
+    int currentLife = 5;
+    float heartValue = -100f;
+    float stepHeartFill = 0f;
+    RectTransform heartTransform;
+    float heartHeight;
+    Vector2 anchoredPosition;
+    float stepFill = 0f;
+    float currentPositionHeartFill = 0f;
+    bool spendBarHeart = false;
 
     void Awake()
     {
@@ -61,6 +93,11 @@ public class UIManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             HandleMouseClick();
+        }
+
+        if (spendBarHeart)
+        {
+            DecreaseLife();
         }
     }
 
@@ -107,6 +144,7 @@ public class UIManager : MonoBehaviour
 
     void HandleMouseClick()
     {
+        bool match = false;
         Vector3 worldPosition = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane));        
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(worldPosition, collectionRadius, itemLayer);
         
@@ -120,12 +158,27 @@ public class UIManager : MonoBehaviour
                 }
                 
                 hitCollider.GetComponent<Cat>().SuccessItem();
+                match = true;
                 searchCount++;
 
                 if (maxSearchCount <= searchCount)
                 {
                     StartCoroutine(SuccessLevel());
                 }
+            }
+        }
+
+        if (!match)
+        {
+            playerData.misses += 1;
+            misses += 1;
+            currentLife -= 1;
+            currentPositionHeartFill += stepHeartFill;
+            spendBarHeart = true;
+
+            if (cameraShake != null)
+            {
+                cameraShake.StartHitShake();
             }
         }
     }
@@ -141,6 +194,22 @@ public class UIManager : MonoBehaviour
         }
         
         PlayerPrefs.SetInt("CurrentLevel", currentLevel + 1);
+    }
+
+    public void DecreaseLife()
+    {
+        anchoredPosition.y -= stepHeartFill;
+        heartTransform.anchoredPosition = anchoredPosition;
+
+        if (Math.Abs(anchoredPosition.y) >= currentPositionHeartFill)
+        {
+            spendBarHeart = false;
+        }
+
+        if (currentLife <= 0)
+        {
+            endLevel = true;
+        }
     }
 
     public void IncreaseMaxSearchCount()
