@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5485000607109743075}
   - component: {fileID: 2771242704439666291}
-  - component: {fileID: -2942222927721751476}
   - component: {fileID: 5315098853394052601}
+  - component: {fileID: 8829605701004774660}
   m_Layer: 0
   m_Name: CrossMiss
   m_TagString: Untagged
@@ -93,19 +93,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &-2942222927721751476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3682769003917628256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b080a618e7079d24f89f12a71e6b6a50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Destroy
-  time: 1
 --- !u!82 &5315098853394052601
 AudioSource:
   m_ObjectHideFlags: 0
@@ -203,3 +190,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8829605701004774660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3682769003917628256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eea1424105061746a20017785963f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Destroy
+  time: 1

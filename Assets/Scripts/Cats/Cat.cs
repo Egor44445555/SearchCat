@@ -6,6 +6,7 @@ public class Cat : MonoBehaviour
     [SerializeField] GameObject particle;
 
     SpriteRenderer spriteRenderer;
+    bool isActive = false;
 
     void Start()
     {
@@ -22,5 +23,11 @@ public class Cat : MonoBehaviour
         spriteRenderer.sprite = successImage;
         Instantiate(particle, transform.position, Quaternion.identity);
         gameObject.tag = "Untagged";
+        isActive = true;
+    }
+
+    public bool IsActive()
+    {
+        return isActive;
     }
 }
