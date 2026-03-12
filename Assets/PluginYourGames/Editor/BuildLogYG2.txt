@@ -1,0 +1,3 @@
+﻿Build path: /Users/dilyarasharifullina/Documents/Unity/SearchCat/BuildWeb/Build
+Build number: 0
+PluginYG version: 2.008
